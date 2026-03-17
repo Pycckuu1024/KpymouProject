@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/Pycckuu1024/StradaGO/app/calendar"
-	"github.com/Pycckuu1024/StradaGO/app/events"
+	"github.com/Pycckuu1024/KpymouProject/app/calendar"
+	"github.com/Pycckuu1024/KpymouProject/app/events"
 )
 
 func main() {

@@ -5,7 +5,7 @@ import (
 
 	"fmt"
 
-	"github.com/Pycckuu1024/StradaGO/app/events"
+	"github.com/Pycckuu1024/KpymouProject/app/events"
 )
 
 var eventsMap = make(map[string]events.Event)

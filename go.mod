@@ -1,4 +1,4 @@
-module https://github.com/Pycckuu1024/KpymouProject
+module github.com/Pycckuu1024/KpymouProject
 
 go 1.26.1
 
