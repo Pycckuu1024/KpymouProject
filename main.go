@@ -4,31 +4,50 @@ import (
 	"fmt"
 
 	"github.com/Pycckuu1024/KpymouProject/app/calendar"
-	"github.com/Pycckuu1024/KpymouProject/app/events"
 )
 
+//	func main() {
+//		event1, err1 := calendar.AddEvent("Встреча", "2025/06/12 16:33")
+//		if err1 != nil {
+//			fmt.Println("Ошибка:", err1)
+//			return
+//		}
+//
+//		event2, err2 := calendar.AddEvent("Еще одна встреча", "2025/06/12 15:00")
+//		if err2 != nil {
+//			fmt.Println("Ошибка:", err2)
+//			return
+//		}
+//
+//		calendar.ShowEvents()
+//		calendar.DeleteEvent(event1.ID)
+//
+//		calendar.EditEvent(event2.ID, "Заменённое событие", "1111/11/11 11:11")
+//		calendar.ShowEvents()
+//	}
 func main() {
-	event1, err1 := calendar.AddEvent("Встреча", "2025/06/12 16:33")
+	c := calendar.NewCalendar()
+
+	event1, err1 := c.AddEvent("Встреча номер 1", "2025/06/12")
 	if err1 != nil {
 		fmt.Println("Ошибка:", err1)
-		return
+	} else {
+		fmt.Println(event1.Title, "добавлено")
 	}
 
-	event2, err2 := calendar.AddEvent("Еще одна встреча", "2025/06/12 15:00")
+	event2, err2 := c.AddEvent("Встреча номер 2", "2025/06/12")
 	if err2 != nil {
 		fmt.Println("Ошибка:", err2)
-		return
+	} else {
+		fmt.Println(event2.Title, "добавлено")
 	}
 
-	calendar.ShowEvents()
-	calendar.DeleteEvent(event1.ID)
-
-	d, err := events.NewEvent("Созвон", "1111/11/11 11:11")
+	err := c.EditEvent(event2.ID, "Созвон", "2025/06/12 16:50")
 	if err != nil {
-		fmt.Println("Ошибка создания события:", err)
-		return
-
+		fmt.Println("Ошибка:", err)
+	} else {
+		fmt.Println("Событие обновлено")
 	}
-	calendar.EditEvent(event2.ID, d)
-	calendar.ShowEvents()
+
+	c.ShowEvents()
 }

@@ -8,12 +8,20 @@ import (
 	"github.com/Pycckuu1024/KpymouProject/app/events"
 )
 
-var eventsMap = make(map[string]events.Event)
+type Calendar struct {
+	eventsMap map[string]*events.Event
+}
 
-func AddEvent(title string, date string) (events.Event, error) {
+var eventsMap = make(map[string]*events.Event)
+
+func NewCalendar() *Calendar {
+	return &Calendar{}
+}
+
+func (*Calendar) AddEvent(title string, date string) (*events.Event, error) {
 	e, err := events.NewEvent(title, date)
 	if err != nil {
-		return events.Event{}, errors.New("неверное имя задачи")
+		return &events.Event{}, errors.New("неверное имя задачи")
 	}
 	fmt.Printf("\nДобавлено событие - ID : %s, Имя : %s, Дата : %s\n", e.ID, e.Title, e.StartAt)
 	eventsMap[e.ID] = e
@@ -21,22 +29,21 @@ func AddEvent(title string, date string) (events.Event, error) {
 	return e, nil
 }
 
-func EditEvent(key string, e events.Event) {
-	if _, ok := eventsMap[key]; ok {
-		fmt.Printf("\nИзменено событие : %s", eventsMap[key])
-		eventsMap[key] = e
-		fmt.Printf(" на : %s\n", eventsMap[key])
-	} else {
-		fmt.Printf("\nНет события с таким именем, изменения невозожны !\n")
-		fmt.Printf("\nНет события с таким именем, изменения невозожны !\n")
-
+func (*Calendar) EditEvent(id string, title string, date string) error {
+	e, exists := eventsMap[id]
+	if !exists {
+		return fmt.Errorf("ивент с таким ключом %q не найден", id)
 	}
+	fmt.Printf("\nОбновлено событие '%s' на '%s'\n ", e.Title, title)
+	err := e.Update(title, date)
+	return err
 }
-func DeleteEvent(key string) {
+
+func (*Calendar) DeleteEvent(key string) {
 	fmt.Printf("\nУдалено Событие : %s\n", eventsMap[key])
 	delete(eventsMap, key)
 }
-func ShowEvents() {
+func (*Calendar) ShowEvents() {
 	for _, v := range eventsMap {
 		fmt.Printf("\n ID : %s  Событие : %s.  Дата : %v.\n", v.ID, v.Title, v.StartAt)
 	}

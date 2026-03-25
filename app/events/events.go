@@ -2,6 +2,7 @@ package events
 
 import (
 	"errors"
+	"fmt"
 	"regexp"
 	"time"
 
@@ -16,31 +17,42 @@ type Event struct {
 }
 
 func getNextID() string {
-	return uuid.New().String() // создает и возвращает уникальный айди
+	return uuid.New().String()
 }
 
-func isValidTitle(title string) bool {
-	patern := "^[a-zA-Z0-9а-яёА-ЯЁ ]{3,50}$"
-	matched, err := regexp.MatchString(patern, title)
+func IsValidTitle(title string) bool {
+	pattern := "^[a-zA-Z0-9а-яёА-ЯЁ ]{3,50}$"
+	matched, err := regexp.MatchString(pattern, title)
 	if err != nil {
 		return false
 	}
 	return matched
 }
 
-func NewEvent(title string, dateStr string) (Event, error) {
-	t, err := dateparse.ParseAny(dateStr)
+func NewEvent(title string, date string) (*Event, error) {
+	t, err := dateparse.ParseAny(date)
 	if err != nil {
-		return Event{}, errors.New("неверный формат даты")
+		return &Event{}, errors.New("неверный формат даты")
 	}
-	checkTitle := isValidTitle(title)
+	checkTitle := IsValidTitle(title)
 	if checkTitle == false {
-		return Event{}, errors.New("неверное имя задачи")
+		return &Event{}, errors.New("неверное имя задачи")
 	}
-	return Event{
+	return &Event{
 		ID:      getNextID(),
 		Title:   title,
 		StartAt: t,
 	}, nil
 
+}
+
+func (e *Event) Print() {
+	fmt.Println(e.Title, e.StartAt)
+}
+
+func (e *Event) Update(title string, date string) error {
+	d, _ := dateparse.ParseAny(date)
+	e.Title = title
+	e.StartAt = d
+	return nil
 }
